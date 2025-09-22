@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: auth-service
+  data:
+    mongodb:
+      uri: ${MONGODB_URI:mongodb://localhost:27017/neo-piggy-auth}
+
+server:
+  port: ${PORT:8081}
+
+app:
+  jwt:
+    secret: ${JWT_SECRET:dev-secret-change-me-at-least-32-bytes}
+    expirationMinutes: ${JWT_EXP_MINUTES:60}
+    refreshExpirationMinutes: ${JWT_REFRESH_EXP_MINUTES:43200} # 30 days
