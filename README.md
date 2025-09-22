@@ -1,36 +1,78 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🐷 NEO-PIGGY (Modern PiggyMetrics)
 
-## Getting Started
+A modernized version of [PiggyMetrics](https://github.com/sqshq/PiggyMetrics), rebuilt with **Spring Boot Microservices**, **MongoDB**, and **React.js**, designed for cloud-ready deployment.
 
-First, run the development server:
+---
 
+## ✨ Features
+- **Microservices Architecture**: Auth, Account, Statistics, Notification
+- **Secure APIs** with Spring Security + JWT
+- **MongoDB** for flexible data storage
+- **Spring Cloud**: Gateway, Config Server, Eureka Discovery
+- **React.js Dashboard** for expense visualization
+- **Dockerized** for containerized deployment
+- **Future Ready**: AI-driven expense categorization (planned)
+
+---
+
+## 🏗️ Architecture
+[ Client (React.js) ]
+|
+[ API Gateway ] ←→ [ Auth Service ]
+| ←→ [ Account Service ]
+| ←→ [ Statistics Service ]
+| ←→ [ Notification Service ]
+|
+[ Config Server ] + [ Eureka Server ]
+
+yaml
+Copy code
+
+---
+
+## 🚀 Getting Started
+
+### 1. Clone Repo
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+git clone https://github.com/WASTED-03/NEO-PIGGY.git
+cd NEO-PIGGY
+2. Run with Docker
+bash
+Copy code
+docker-compose up --build
+3. Access Services
+API Gateway → http://localhost:8080
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Eureka Dashboard → http://localhost:8761
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+React Dashboard → http://localhost:3000
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+📂 Tech Stack
+Backend: Java 17, Spring Boot 3, Spring Cloud
 
-## Learn More
+Database: MongoDB
 
-To learn more about Next.js, take a look at the following resources:
+Frontend: React.js + TailwindCSS
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+DevOps: Docker, Docker Compose, GitHub Actions (CI/CD planned)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Cloud: AWS (planned)
 
-## Deploy on Vercel
+👨‍💻 Author
+Arnav Ashok – LinkedIn | Portfolio
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+yaml
+Copy code
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 3️⃣ Steps to Add Them to Your Repo
+1. Open terminal in your repo root:  
+```bash
+cd path/to/NEO-PIGGY
+Create the files:
+
+bash
+Copy code
+touch .gitignore
+touch README.md
