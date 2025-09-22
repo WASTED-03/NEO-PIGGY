@@ -1,0 +1,62 @@
+diff --git a/scripts/postinstall.js b/scripts/postinstall.js
+index 517617ffbe2341bc318bdfbc222837d303a7aaf2..4b98de5fd94a5b4284a4afd8ee8b78d59b214745 100755
+--- a/scripts/postinstall.js
++++ b/scripts/postinstall.js
+@@ -121,13 +121,30 @@ async function main() {
+     ? new HttpsProxyAgent(proxyUrl, { keepAlive: true })
+     : new Agent({ keepAlive: true });
+ 
+-  // First, fetch the checksum map.
+-  const checksumMap = await fetchAndParseCheckSumFile(pkg, agent);
++  // Prefer local resources if present (project root via INIT_CWD)
++  const projectRoot = process.env.INIT_CWD || process.cwd();
++  const resourcesDir = path.join(projectRoot, ".easycode-ai", "supabase", "v2.34.3");
++  const localChecksumPath = path.join(resourcesDir, `${pkg.name}_${pkg.version}_checksums.txt`);
++  const localTgzPath = path.join(resourcesDir, `${pkg.name}_${platform}_${arch}.tar.gz`);
++  
++  // First, read checksum map from local file if available; otherwise fetch
++  let checksumMap;
++  try {
++    const checkSumContent = await fs.promises.readFile(localChecksumPath, "utf8");
++    const lines = checkSumContent.split("\n");
++    checksumMap = {};
++    for (const line of lines) {
++      const [checksum, packageName] = line.split(/\s+/);
++      if (packageName) checksumMap[packageName] = checksum;
++    }
++    console.info("Using local checksum file", localChecksumPath);
++  } catch {
++    // fallback to remote checksum
++    checksumMap = await fetchAndParseCheckSumFile(pkg, agent);
++  }
+ 
+   // Then, download the binary.
+   const url = getDownloadUrl(pkg);
+-  console.info("Downloading", url);
+-  const resp = await fetch(url, { agent });
+   const hash = createHash("sha256");
+   const pkgNameWithPlatform = `${pkg.name}_${platform}_${arch}.tar.gz`;
+ 
+@@ -137,7 +154,21 @@ async function main() {
+   const untar = extract({ cwd: binDir }, [binName]);
+ 
+   // Update the hash with the binary data as it's being downloaded.
+-  resp.body
++  let sourceStream;
++  let usingLocal = false;
++  try {
++    await fs.promises.access(localTgzPath, fs.constants.R_OK);
++    usingLocal = true;
++  } catch {}
++  if (usingLocal) {
++    console.info("Using local tgz", localTgzPath);
++    sourceStream = fs.createReadStream(localTgzPath);
++  } else {
++    console.info("Downloading", url);
++    const resp = await fetch(url, { agent });
++    sourceStream = resp.body;
++  }
++  sourceStream
+     .on("data", (chunk) => {
+       hash.update(chunk);
+     })
